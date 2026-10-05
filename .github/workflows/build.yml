@@ -1,7 +1,16 @@
 name: Build LimeCore
+
 on:
   push:
+    branches:
+      - main
+    tags:
+      - 'v*'
   workflow_dispatch:
+
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -12,8 +21,17 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: maven
-      - run: mvn -B clean package
-      - uses: actions/upload-artifact@v4
+      - name: Build JAR
+        run: mvn -B clean package
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: LimeCore
+          name: LimeCore-${{ github.ref_name }}
           path: target/LimeCore-0.1.0.jar
+          if-no-files-found: error
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: target/LimeCore-0.1.0.jar
+          generate_release_notes: true
