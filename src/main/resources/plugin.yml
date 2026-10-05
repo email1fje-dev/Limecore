@@ -1,0 +1,14 @@
+name: LimeCore
+version: 0.1.0
+main: com.limecore.LimeCore
+api-version: '1.21'
+author: email1fje-dev
+description: Custom SMP core with an in-game OP admin panel and random events.
+commands:
+  ap:
+    description: Opens the LimeCore admin panel.
+    usage: /ap
+permissions:
+  limecore.admin:
+    description: Access to LimeCore admin panel.
+    default: op
